@@ -7,7 +7,7 @@ import { TestData } from '../../constants/testData';
  * Product Search Test Suite
  * Tests product search functionality, filtering, and AI-powered search
  */
-test.describe('Product Search Tests', () => {
+test.describe('Product Search Tests', { tag: ['@smoke', '@regression'] }, () => {
   let homePage: HomePage;
 
   test.beforeEach(async ({ page }, testInfo) => {

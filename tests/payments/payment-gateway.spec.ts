@@ -7,7 +7,7 @@ import { TestData } from '../../constants/testData';
  * Tests payment processing with Shopify test cards
  * Note: These tests use Shopify test mode cards and should not process real payments
  */
-test.describe('Payment Gateway Tests', () => {
+test.describe('Payment Gateway Tests', { tag: ['@regression'] }, () => {
   let shopPage: ShopPage;
 
   test.beforeEach(async ({ page }, testInfo) => {

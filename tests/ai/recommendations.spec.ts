@@ -7,7 +7,7 @@ import { TestData } from '../../constants/testData';
  * AI Recommendations Test Suite
  * Tests AI-powered product recommendations and personalization
  */
-test.describe('AI Recommendations Tests', () => {
+test.describe('AI Recommendations Tests', { tag: ['@regression'] }, () => {
   let homePage: HomePage;
   let startQuizPage: StartQuizPage;
 

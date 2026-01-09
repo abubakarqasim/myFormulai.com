@@ -7,7 +7,7 @@ import { PerformanceHelper } from '../../utils/PerformanceHelper';
  * Performance Test Suite
  * Tests page load times and performance metrics
  */
-test.describe('Performance Tests', () => {
+test.describe('Performance Tests', { tag: ['@regression'] }, () => {
   let homePage: HomePage;
 
   test.beforeEach(async ({ page }, testInfo) => {

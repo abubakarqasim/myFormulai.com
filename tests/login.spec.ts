@@ -2,7 +2,7 @@ import { test } from './BaseTest';
 import { LoginPage } from '../pages/LoginPage';
 import { TestData } from '../constants/testData';
 
-test.describe('Login Tests', () => {
+test.describe('Login Tests', { tag: ['@sanity', '@smoke', '@regression'] }, () => {
   let loginPage: LoginPage;
 
   test.beforeEach(async ({ page }, testInfo) => {

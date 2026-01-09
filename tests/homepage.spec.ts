@@ -2,7 +2,7 @@ import { test } from './BaseTest';
 import { expect } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 
-test.describe('Homepage Tests', () => {
+test.describe('Homepage Tests', { tag: ['@sanity', '@smoke', '@regression'] }, () => {
   // Configure tests to run serially (one after another) in a single iteration
   test.describe.configure({ mode: 'serial' });
 

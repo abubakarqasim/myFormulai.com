@@ -91,6 +91,131 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+  test-sanity:
+    name: Test - Sanity Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Sanity tests
+        run: npm run test:sanity
+        env:
+          ENV: ${{ github.event.inputs.environment || 'local' }}
+
+      - name: Upload Sanity test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-test-results
+          path: |
+            test-results/
+            allure-results/
+          retention-days: 7
+
+  test-smoke:
+    name: Test - Smoke Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Smoke tests
+        run: npm run test:smoke
+        env:
+          ENV: ${{ github.event.inputs.environment || 'local' }}
+
+      - name: Upload Smoke test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-results
+          path: |
+            test-results/
+            allure-results/
+          retention-days: 7
+
+  test-regression:
+    name: Test - Regression Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Regression tests
+        run: npm run test:regression
+        env:
+          ENV: ${{ github.event.inputs.environment || 'local' }}
+
+      - name: Generate Allure Report
+        if: always()
+        run: npm run test:allure:generate
+        continue-on-error: true
+
+      - name: Upload Regression test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-test-results
+          path: |
+            test-results/
+            allure-results/
+            reports/
+            apis-testcases/
+            mcp/context/
+          retention-days: 30
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-allure-report
+          path: allure-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
   test-chrome-only:
     name: Test - Chrome (All Suites)
     runs-on: ubuntu-latest

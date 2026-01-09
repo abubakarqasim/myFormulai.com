@@ -11,7 +11,7 @@ import { TestData } from '../constants/testData';
  * 
  * Note: This test runs only on Chromium browser for consistency.
  */
-test.describe('Start Quiz Tests', () => {
+test.describe('Start Quiz Tests', { tag: ['@regression'] }, () => {
   let startQuizPage: StartQuizPage;
 
   test.beforeEach(async ({ page }, testInfo) => {

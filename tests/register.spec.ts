@@ -4,7 +4,7 @@ import { TestData } from '../constants/testData';
 import { UserStorage } from '../utils/UserStorage';
 import * as path from 'path';
 
-test.describe('Register Tests', () => {
+test.describe('Register Tests', { tag: ['@smoke', '@regression'] }, () => {
   let registerPage: RegisterPage;
 
   test.beforeEach(async ({ page }, testInfo) => {

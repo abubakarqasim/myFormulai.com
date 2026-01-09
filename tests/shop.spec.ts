@@ -5,7 +5,7 @@ import { TestData } from '../constants/testData';
 /**
  * Shop E2E Test Suite
  */
-test.describe('Shop E2E Tests', () => {
+test.describe('Shop E2E Tests', { tag: ['@sanity', '@smoke', '@regression'] }, () => {
   let shopPage: ShopPage;
 
   test.beforeEach(async ({ page }, testInfo) => {
