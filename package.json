@@ -38,7 +38,13 @@
     "newman:run": "node newman/runner.js",
     "newman:run:report": "node newman/runner.js --report",
     "newman:run:all": "node newman/runner.js --report --json-report --junit-report",
-    "newman:list": "node newman/list.js"
+    "newman:list": "node newman/list.js",
+    "k6:smoke": "node k6/runner.js smoke-test",
+    "k6:homepage": "node k6/runner.js homepage",
+    "k6:api": "node k6/runner.js api-endpoints",
+    "k6:stress": "node k6/runner.js stress-test",
+    "k6:spike": "node k6/runner.js spike-test",
+    "k6:list": "node k6/list.js"
   },
   "keywords": [],
   "author": "",
