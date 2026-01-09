@@ -40,7 +40,10 @@ test.describe('Start Quiz Tests', { tag: ['@regression'] }, () => {
     try {
       await startQuizPage.scrollIntoView(startQuizPage.quizLocators.nextButton, 5000);
     } catch {
-      await startQuizPage.page.evaluate(() => window.scrollBy(0, 300));
+      await startQuizPage.page.evaluate(() => {
+        // @ts-expect-error - window is available in browser context
+        window.scrollBy(0, 300);
+      });
       await startQuizPage.wait(500);
     }
     await startQuizPage.clickNext();
