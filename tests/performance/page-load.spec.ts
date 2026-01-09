@@ -7,7 +7,7 @@ import { PerformanceHelper } from '../../utils/PerformanceHelper';
  * Performance Test Suite
  * Tests page load times and performance metrics
  */
-test.describe('Performance Tests', () => {
+test.describe('Performance Tests', { tag: ['@regression'] }, () => {
   let homePage: HomePage;
 
   test.beforeEach(async ({ page }, testInfo) => {
@@ -23,10 +23,6 @@ test.describe('Performance Tests', () => {
     await homePage.navigate();
     await page.waitForLoadState('domcontentloaded');
     const loadTime = Date.now() - startTime;
-
-    console.log(`📊 Homepage load time: ${loadTime}ms`);
-    
-    // Assert load time is less than 5 seconds (adjust based on requirements)
     expect(loadTime).toBeLessThan(5000);
     
     await page.close();
@@ -40,9 +36,6 @@ test.describe('Performance Tests', () => {
     const startTime = Date.now();
     await page.goto('https://myformulai.com/collections/shop-all', { waitUntil: 'domcontentloaded' });
     const loadTime = Date.now() - startTime;
-
-    console.log(`📊 Shop page load time: ${loadTime}ms`);
-    
     expect(loadTime).toBeLessThan(5000);
     
     await page.close();
@@ -56,9 +49,6 @@ test.describe('Performance Tests', () => {
     const startTime = Date.now();
     await page.goto('https://myformulai.com/products/ai1-all-in-one-supplement', { waitUntil: 'domcontentloaded' });
     const loadTime = Date.now() - startTime;
-
-    console.log(`📊 Product page load time: ${loadTime}ms`);
-    
     expect(loadTime).toBeLessThan(5000);
     
     await page.close();
@@ -73,18 +63,10 @@ test.describe('Performance Tests', () => {
 
     try {
       const metrics = await PerformanceHelper.getPerformanceMetrics(page);
-      console.log('📊 Performance Metrics:', {
-        loadTime: `${metrics.loadTime}ms`,
-        domContentLoaded: `${metrics.domContentLoaded}ms`,
-        firstPaint: `${metrics.firstPaint}ms`,
-        firstContentfulPaint: `${metrics.firstContentfulPaint}ms`,
-      });
-
-      // Assert key metrics
       expect(metrics.loadTime).toBeLessThan(5000);
       expect(metrics.domContentLoaded).toBeLessThan(3000);
-    } catch (error) {
-      console.log('⚠️ Performance metrics not available, but test continued');
+    } catch {
+      // Performance metrics not available
     }
 
     await page.close();

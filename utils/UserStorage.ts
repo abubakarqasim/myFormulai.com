@@ -65,9 +65,6 @@ export class UserStorage {
    * @param userData - User data to save
    */
   static saveUser(userData: UserData): void {
-    console.log(`📝 UserStorage.saveUser called with email: ${userData.email}`);
-    console.log(`📁 File path: ${this.USERS_FILE_PATH}`);
-    
     this.ensureDataDirectory();
 
     // Ensure timestamp is a valid number (use current time if invalid or not provided)
@@ -111,9 +108,7 @@ export class UserStorage {
     };
 
     const usersData = this.readUsers();
-    console.log(`📊 Current users count: ${usersData.users.length}`);
     usersData.users.push(userDataWithDate);
-    console.log(`📊 New users count: ${usersData.users.length}`);
 
     try {
       const fileContent = JSON.stringify(usersData, null, 2);
@@ -122,12 +117,8 @@ export class UserStorage {
         fileContent,
         'utf-8'
       );
-      console.log(`✅ User credentials saved successfully: ${userData.email} (${dateTimeStr}, ${dayName})`);
-      console.log(`📁 File written to: ${this.USERS_FILE_PATH}`);
     } catch (error) {
-      console.error('❌ Failed to save user credentials:', error);
-      console.error(`❌ Error details:`, error instanceof Error ? error.message : String(error));
-      throw error;
+      throw new Error(`Failed to save user credentials: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

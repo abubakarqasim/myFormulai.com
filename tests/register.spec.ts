@@ -2,9 +2,8 @@ import { test } from './BaseTest';
 import { RegisterPage } from '../pages/RegisterPage';
 import { TestData } from '../constants/testData';
 import { UserStorage } from '../utils/UserStorage';
-import * as path from 'path';
 
-test.describe('Register Tests', () => {
+test.describe('Register Tests', { tag: ['@smoke', '@regression'] }, () => {
   let registerPage: RegisterPage;
 
   test.beforeEach(async ({ page }, testInfo) => {
@@ -30,9 +29,6 @@ test.describe('Register Tests', () => {
       await registerPage.wait(1000);
 
       // Step 3: Save user credentials BEFORE registration (to ensure they're saved even if registration fails)
-      console.log(`📝 [REGISTER TEST] Attempting to save user BEFORE registration: ${email}`);
-      console.log(`📝 [REGISTER TEST] File path will be: ${path.join(process.cwd(), 'data', 'users.json')}`);
-      
       try {
         UserStorage.saveUser({
           email,
@@ -40,10 +36,7 @@ test.describe('Register Tests', () => {
           timestamp: registrationTimestamp,
         });
         userSaved = true;
-        console.log(`✅ [REGISTER TEST] User saved successfully: ${email}`);
       } catch (saveError) {
-        console.error(`❌ [REGISTER TEST] Failed to save user ${email}:`, saveError);
-        console.error(`❌ [REGISTER TEST] Error stack:`, saveError instanceof Error ? saveError.stack : String(saveError));
         // Don't throw here - continue with registration attempt
       }
 
@@ -60,45 +53,35 @@ test.describe('Register Tests', () => {
       await page.waitForLoadState('domcontentloaded', { timeout: 15000 });
 
     } catch (error) {
-      console.error(`❌ [REGISTER TEST] Test failed with error:`, error);
-      // If save didn't happen, try one more time
       if (!userSaved) {
-        console.log(`📝 [REGISTER TEST] Retrying save after test failure...`);
         try {
           UserStorage.saveUser({
             email,
             password,
             timestamp: registrationTimestamp,
           });
-          console.log(`✅ [REGISTER TEST] User saved successfully after retry: ${email}`);
-        } catch (retryError) {
-          console.error(`❌ [REGISTER TEST] Failed to save user on retry:`, retryError);
+        } catch {
+          // Ignore save errors
         }
       }
-      throw error; // Re-throw to fail the test
+      throw error;
     } finally {
-      // Ensure page is closed
       try {
         if (page && !page.isClosed()) {
           await page.close();
         }
-      } catch (closeError) {
+      } catch {
         // Ignore close errors
       }
-      
-      // Final verification - check if user was actually saved
       if (!userSaved) {
-        console.warn(`⚠️ [REGISTER TEST] User may not have been saved. Email: ${email}`);
-        // Try one final save attempt
         try {
           UserStorage.saveUser({
             email,
             password,
             timestamp: registrationTimestamp,
           });
-          console.log(`✅ [REGISTER TEST] User saved in finally block: ${email}`);
-        } catch (finalError) {
-          console.error(`❌ [REGISTER TEST] Final save attempt failed:`, finalError);
+        } catch {
+          // Ignore save errors
         }
       }
     }

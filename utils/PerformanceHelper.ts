@@ -15,15 +15,7 @@ export class PerformanceHelper {
   static async measurePageLoadTime(page: Page, url: string, maxLoadTime: number = 3000): Promise<number> {
     const startTime = Date.now();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
-    const loadTime = Date.now() - startTime;
-    
-    if (loadTime > maxLoadTime) {
-      console.warn(`⚠️ Page load time (${loadTime}ms) exceeds maximum (${maxLoadTime}ms) for ${url}`);
-    } else {
-      console.log(`✅ Page load time: ${loadTime}ms for ${url}`);
-    }
-    
-    return loadTime;
+    return Date.now() - startTime;
   }
 
   /**
@@ -50,17 +42,13 @@ export class PerformanceHelper {
 
         if (matches && !resolved) {
           resolved = true;
-          const responseTime = Date.now() - startTime;
-          console.log(`✅ API response time: ${responseTime}ms for ${url}`);
-          resolve(responseTime);
+          resolve(Date.now() - startTime);
         }
       });
 
-      // Timeout after specified time
       setTimeout(() => {
         if (!resolved) {
           resolved = true;
-          console.warn(`⚠️ API response timeout for pattern: ${urlPattern}`);
           resolve(null);
         }
       }, timeout);

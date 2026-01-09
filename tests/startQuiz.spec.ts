@@ -11,14 +11,14 @@ import { TestData } from '../constants/testData';
  * 
  * Note: This test runs only on Chromium browser for consistency.
  */
-test.describe('Start Quiz Tests', () => {
+test.describe('Start Quiz Tests', { tag: ['@regression'] }, () => {
   let startQuizPage: StartQuizPage;
 
   test.beforeEach(async ({ page }, testInfo) => {
     startQuizPage = new StartQuizPage(page);
   });
 
-  test('Complete Formulai quiz flow from homepage to results submission', async ({ page, testData }, testInfo) => {
+  test('Complete Formulai quiz flow from homepage to results submission', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Test runs only on Chrome');
     test.setTimeout(300000); // 5 minutes for complete quiz flow
 
@@ -39,9 +39,9 @@ test.describe('Start Quiz Tests', () => {
     await startQuizPage.verifyNextButtonVisible();
     try {
       await startQuizPage.scrollIntoView(startQuizPage.quizLocators.nextButton, 5000);
-    } catch (error) {
+    } catch {
       await startQuizPage.page.evaluate(() => {
-        // @ts-ignore
+        // @ts-expect-error - window is available in browser context
         window.scrollBy(0, 300);
       });
       await startQuizPage.wait(500);

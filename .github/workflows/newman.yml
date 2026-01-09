@@ -2,9 +2,9 @@ name: API Tests - Newman
 
 on:
   push:
-    branches: [ main, develop, master ]
+    branches: [ master ]
   pull_request:
-    branches: [ main, develop, master ]
+    branches: [ master ]
   workflow_dispatch:
     inputs:
       collection:

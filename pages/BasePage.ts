@@ -41,13 +41,9 @@ export class BasePage {
       // This accounts for browser chrome (address bar, tabs, bookmarks, etc.)
       const contentArea = await this.page.evaluate(() => {
         return {
-          // @ts-ignore - window is available in browser context
           innerWidth: window.innerWidth || 1280,
-          // @ts-ignore
           innerHeight: window.innerHeight || 720,
-          // @ts-ignore
           availWidth: window.screen.availWidth || 1920,
-          // @ts-ignore
           availHeight: window.screen.availHeight || 1080,
         };
       });
@@ -90,8 +86,6 @@ export class BasePage {
       // Verify viewport was set correctly
       const viewport = this.page.viewportSize();
       if (viewport) {
-        console.log(`✅ Viewport optimized: ${viewport.width}x${viewport.height} (prevents content cutoff)`);
-        
         // Double-check that content area matches viewport
         const verifyContentArea = await this.page.evaluate(() => {
           return {

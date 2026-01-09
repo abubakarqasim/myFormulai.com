@@ -2,7 +2,7 @@ import { test } from './BaseTest';
 import { expect } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 
-test.describe('Homepage Tests', () => {
+test.describe('Homepage Tests', { tag: ['@sanity', '@smoke', '@regression'] }, () => {
   // Configure tests to run serially (one after another) in a single iteration
   test.describe.configure({ mode: 'serial' });
 
@@ -25,7 +25,6 @@ test.describe('Homepage Tests', () => {
     const loadTime = Date.now() - startTime;
     
     // Performance check: Page should load within 5 seconds
-    console.log(`📊 Homepage load time: ${loadTime}ms`);
     if (loadTime > 5000) {
       console.warn(`⚠️ Page load time (${loadTime}ms) exceeds 5 seconds`);
     }

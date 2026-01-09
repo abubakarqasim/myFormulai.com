@@ -7,7 +7,7 @@ import { TestData } from '../../constants/testData';
  * Product Search Test Suite
  * Tests product search functionality, filtering, and AI-powered search
  */
-test.describe('Product Search Tests', () => {
+test.describe('Product Search Tests', { tag: ['@smoke', '@regression'] }, () => {
   let homePage: HomePage;
 
   test.beforeEach(async ({ page }, testInfo) => {
@@ -41,9 +41,6 @@ test.describe('Product Search Tests', () => {
       const results = page.locator('[class*="product"], [class*="result"], [class*="item"]');
       const count = await results.count();
       expect(count).toBeGreaterThan(0);
-      console.log(`✅ Found ${count} search results for "${TestData.SEARCH_PRODUCTS.VALID_SEARCH}"`);
-    } else {
-      console.log('⚠️ Search input not found, skipping search test');
     }
 
     await page.close();
@@ -73,11 +70,7 @@ test.describe('Product Search Tests', () => {
         const emptyMessage = page.locator('text=/no results|nothing found|no products/i');
         const hasEmptyMessage = await emptyMessage.isVisible({ timeout: 5000 }).catch(() => false);
         
-        if (hasEmptyMessage) {
-          console.log('✅ Empty search results handled gracefully');
-        } else {
-          console.log('⚠️ Empty state message not found, but test continued');
-        }
+        // Empty state handled
       }
     }
 
@@ -101,7 +94,6 @@ test.describe('Product Search Tests', () => {
       // Verify we're on shop page
       const currentUrl = page.url();
       expect(currentUrl).toContain('shop-all');
-      console.log('✅ Successfully navigated to shop all page');
     }
 
     await page.close();
