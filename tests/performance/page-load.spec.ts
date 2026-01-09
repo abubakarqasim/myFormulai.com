@@ -49,9 +49,6 @@ test.describe('Performance Tests', { tag: ['@regression'] }, () => {
     const startTime = Date.now();
     await page.goto('https://myformulai.com/products/ai1-all-in-one-supplement', { waitUntil: 'domcontentloaded' });
     const loadTime = Date.now() - startTime;
-
-    console.log(`📊 Product page load time: ${loadTime}ms`);
-    
     expect(loadTime).toBeLessThan(5000);
     
     await page.close();
@@ -66,18 +63,10 @@ test.describe('Performance Tests', { tag: ['@regression'] }, () => {
 
     try {
       const metrics = await PerformanceHelper.getPerformanceMetrics(page);
-      console.log('📊 Performance Metrics:', {
-        loadTime: `${metrics.loadTime}ms`,
-        domContentLoaded: `${metrics.domContentLoaded}ms`,
-        firstPaint: `${metrics.firstPaint}ms`,
-        firstContentfulPaint: `${metrics.firstContentfulPaint}ms`,
-      });
-
-      // Assert key metrics
       expect(metrics.loadTime).toBeLessThan(5000);
       expect(metrics.domContentLoaded).toBeLessThan(3000);
-    } catch (error) {
-      console.log('⚠️ Performance metrics not available, but test continued');
+    } catch {
+      // Performance metrics not available
     }
 
     await page.close();

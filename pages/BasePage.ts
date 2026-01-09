@@ -86,8 +86,6 @@ export class BasePage {
       // Verify viewport was set correctly
       const viewport = this.page.viewportSize();
       if (viewport) {
-        console.log(`✅ Viewport optimized: ${viewport.width}x${viewport.height} (prevents content cutoff)`);
-        
         // Double-check that content area matches viewport
         const verifyContentArea = await this.page.evaluate(() => {
           return {

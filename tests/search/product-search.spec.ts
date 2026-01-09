@@ -41,9 +41,6 @@ test.describe('Product Search Tests', { tag: ['@smoke', '@regression'] }, () => 
       const results = page.locator('[class*="product"], [class*="result"], [class*="item"]');
       const count = await results.count();
       expect(count).toBeGreaterThan(0);
-      console.log(`✅ Found ${count} search results for "${TestData.SEARCH_PRODUCTS.VALID_SEARCH}"`);
-    } else {
-      console.log('⚠️ Search input not found, skipping search test');
     }
 
     await page.close();
@@ -97,7 +94,6 @@ test.describe('Product Search Tests', { tag: ['@smoke', '@regression'] }, () => 
       // Verify we're on shop page
       const currentUrl = page.url();
       expect(currentUrl).toContain('shop-all');
-      console.log('✅ Successfully navigated to shop all page');
     }
 
     await page.close();

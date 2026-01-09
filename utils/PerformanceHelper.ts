@@ -42,17 +42,13 @@ export class PerformanceHelper {
 
         if (matches && !resolved) {
           resolved = true;
-          const responseTime = Date.now() - startTime;
-          console.log(`✅ API response time: ${responseTime}ms for ${url}`);
-          resolve(responseTime);
+          resolve(Date.now() - startTime);
         }
       });
 
-      // Timeout after specified time
       setTimeout(() => {
         if (!resolved) {
           resolved = true;
-          console.warn(`⚠️ API response timeout for pattern: ${urlPattern}`);
           resolve(null);
         }
       }, timeout);
