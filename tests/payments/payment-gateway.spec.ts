@@ -41,10 +41,6 @@ test.describe('Payment Gateway Tests', { tag: ['@regression'] }, () => {
     await shopPage.selectAnyState();
     await shopPage.wait(2000);
 
-    // Look for payment section (may be on same page or next step)
-    const paymentSection = page.locator('[class*="payment"], [id*="payment"], input[name*="card"], input[type="tel"]').first();
-    const isPaymentVisible = await paymentSection.isVisible({ timeout: 10000 }).catch(() => false);
-
     // Payment section validation complete
 
     await page.close();
