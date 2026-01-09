@@ -77,6 +77,8 @@ export default function () {
   sleep(1);
 }
 
+import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
+
 export function handleSummary(data) {
   return {
     'k6/reports/api-load-test.json': JSON.stringify(data),
