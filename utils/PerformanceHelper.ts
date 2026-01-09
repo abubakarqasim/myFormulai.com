@@ -15,15 +15,7 @@ export class PerformanceHelper {
   static async measurePageLoadTime(page: Page, url: string, maxLoadTime: number = 3000): Promise<number> {
     const startTime = Date.now();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
-    const loadTime = Date.now() - startTime;
-    
-    if (loadTime > maxLoadTime) {
-      console.warn(`⚠️ Page load time (${loadTime}ms) exceeds maximum (${maxLoadTime}ms) for ${url}`);
-    } else {
-      console.log(`✅ Page load time: ${loadTime}ms for ${url}`);
-    }
-    
-    return loadTime;
+    return Date.now() - startTime;
   }
 
   /**

@@ -23,10 +23,6 @@ test.describe('Performance Tests', { tag: ['@regression'] }, () => {
     await homePage.navigate();
     await page.waitForLoadState('domcontentloaded');
     const loadTime = Date.now() - startTime;
-
-    console.log(`📊 Homepage load time: ${loadTime}ms`);
-    
-    // Assert load time is less than 5 seconds (adjust based on requirements)
     expect(loadTime).toBeLessThan(5000);
     
     await page.close();
@@ -40,9 +36,6 @@ test.describe('Performance Tests', { tag: ['@regression'] }, () => {
     const startTime = Date.now();
     await page.goto('https://myformulai.com/collections/shop-all', { waitUntil: 'domcontentloaded' });
     const loadTime = Date.now() - startTime;
-
-    console.log(`📊 Shop page load time: ${loadTime}ms`);
-    
     expect(loadTime).toBeLessThan(5000);
     
     await page.close();

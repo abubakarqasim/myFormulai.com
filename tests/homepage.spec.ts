@@ -25,7 +25,6 @@ test.describe('Homepage Tests', { tag: ['@sanity', '@smoke', '@regression'] }, (
     const loadTime = Date.now() - startTime;
     
     // Performance check: Page should load within 5 seconds
-    console.log(`📊 Homepage load time: ${loadTime}ms`);
     if (loadTime > 5000) {
       console.warn(`⚠️ Page load time (${loadTime}ms) exceeds 5 seconds`);
     }

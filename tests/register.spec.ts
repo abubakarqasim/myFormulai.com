@@ -2,7 +2,6 @@ import { test } from './BaseTest';
 import { RegisterPage } from '../pages/RegisterPage';
 import { TestData } from '../constants/testData';
 import { UserStorage } from '../utils/UserStorage';
-import * as path from 'path';
 
 test.describe('Register Tests', { tag: ['@smoke', '@regression'] }, () => {
   let registerPage: RegisterPage;
@@ -30,9 +29,6 @@ test.describe('Register Tests', { tag: ['@smoke', '@regression'] }, () => {
       await registerPage.wait(1000);
 
       // Step 3: Save user credentials BEFORE registration (to ensure they're saved even if registration fails)
-      console.log(`📝 [REGISTER TEST] Attempting to save user BEFORE registration: ${email}`);
-      console.log(`📝 [REGISTER TEST] File path will be: ${path.join(process.cwd(), 'data', 'users.json')}`);
-      
       try {
         UserStorage.saveUser({
           email,
@@ -40,10 +36,7 @@ test.describe('Register Tests', { tag: ['@smoke', '@regression'] }, () => {
           timestamp: registrationTimestamp,
         });
         userSaved = true;
-        console.log(`✅ [REGISTER TEST] User saved successfully: ${email}`);
       } catch (saveError) {
-        console.error(`❌ [REGISTER TEST] Failed to save user ${email}:`, saveError);
-        console.error(`❌ [REGISTER TEST] Error stack:`, saveError instanceof Error ? saveError.stack : String(saveError));
         // Don't throw here - continue with registration attempt
       }
 

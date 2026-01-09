@@ -18,7 +18,7 @@ test.describe('Start Quiz Tests', { tag: ['@regression'] }, () => {
     startQuizPage = new StartQuizPage(page);
   });
 
-  test('Complete Formulai quiz flow from homepage to results submission', async ({ page, testData }, testInfo) => {
+  test('Complete Formulai quiz flow from homepage to results submission', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium', 'Test runs only on Chrome');
     test.setTimeout(300000); // 5 minutes for complete quiz flow
 
@@ -39,11 +39,8 @@ test.describe('Start Quiz Tests', { tag: ['@regression'] }, () => {
     await startQuizPage.verifyNextButtonVisible();
     try {
       await startQuizPage.scrollIntoView(startQuizPage.quizLocators.nextButton, 5000);
-    } catch (error) {
-      await startQuizPage.page.evaluate(() => {
-        // @ts-ignore
-        window.scrollBy(0, 300);
-      });
+    } catch {
+      await startQuizPage.page.evaluate(() => window.scrollBy(0, 300));
       await startQuizPage.wait(500);
     }
     await startQuizPage.clickNext();

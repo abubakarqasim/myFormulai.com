@@ -21,17 +21,11 @@ test.describe('Shop E2E Tests', { tag: ['@sanity', '@smoke', '@regression'] }, (
     await shopPage.maximizeWindow();
     
     // ========== Navigate to Homepage ==========
-    const homepageStartTime = Date.now();
     await shopPage.navigateToHomepage();
-    const homepageLoadTime = Date.now() - homepageStartTime;
-    console.log(`📊 Homepage load time: ${homepageLoadTime}ms`);
     await shopPage.wait(3000);
 
     // ========== Navigate to Shop All Page ==========
-    const shopStartTime = Date.now();
     await shopPage.navigateToShopAll();
-    const shopLoadTime = Date.now() - shopStartTime;
-    console.log(`📊 Shop page load time: ${shopLoadTime}ms`);
     await shopPage.wait(3000);
 
     // ========== Click on Product ==========
