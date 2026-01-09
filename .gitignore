@@ -1,0 +1,31 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+reports/
+playwright/.cache/
+.env
+*.log
+.DS_Store
+coverage/
+# Newman reports
+newman/reports/*.html
+newman/reports/*.json
+newman/reports/*.xml
+!newman/reports/.gitkeep
+
+# Allure reports
+allure-results/
+allure-report/
+
+# API testcases (optional - uncomment if you don't want to track API calls in git)
+# apis-testcases/
+
+# MCP Context files
+mcp/context/test-contexts/*.json
+mcp/context/flow-contexts/*.json
+!mcp/context/test-contexts/.gitkeep
+!mcp/context/flow-contexts/.gitkeep
+
+# GitHub Actions artifacts (local)
+.github/artifacts/

@@ -1,0 +1,62 @@
+name: API Tests - Newman
+
+on:
+  push:
+    branches: [ main, develop, master ]
+  pull_request:
+    branches: [ main, develop, master ]
+  workflow_dispatch:
+    inputs:
+      collection:
+        description: 'Postman collection to run'
+        required: false
+        type: string
+      environment:
+        description: 'Environment to use'
+        required: false
+        type: string
+        default: 'local'
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  newman-tests:
+    name: Run Newman API Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: List available collections
+        run: node newman/list.js
+        continue-on-error: true
+
+      - name: Run Newman tests
+        run: |
+          if [ -n "${{ github.event.inputs.collection }}" ]; then
+            node newman/runner.js ${{ github.event.inputs.collection }} ${{ github.event.inputs.environment || 'local' }}
+          else
+            echo "No collection specified. Skipping Newman tests."
+          fi
+        continue-on-error: true
+
+      - name: Upload Newman reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-reports
+          path: newman/reports/
+          retention-days: 30
+          if-no-files-found: ignore

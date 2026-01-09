@@ -1,0 +1,67 @@
+name: Release - Production Tests
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  production-tests:
+    name: Production Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run production tests
+        run: npm run test:chromium
+        env:
+          ENV: prod
+
+      - name: Generate Allure Report
+        if: always()
+        run: npm run test:allure:generate
+        continue-on-error: true
+
+      - name: Upload production test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-test-results-${{ github.event.release.tag_name || github.event.inputs.version }}
+          path: |
+            test-results/
+            allure-results/
+            reports/
+            apis-testcases/
+            mcp/context/
+          retention-days: 365
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-allure-report-${{ github.event.release.tag_name || github.event.inputs.version }}
+          path: allure-report/
+          retention-days: 90

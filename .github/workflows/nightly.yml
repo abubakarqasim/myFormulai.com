@@ -1,0 +1,84 @@
+name: Nightly Test Suite
+
+on:
+  schedule:
+    # Run every day at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  nightly-full-suite:
+    name: Nightly Full Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run all tests
+        run: npm run test:chromium
+        env:
+          ENV: staging
+
+      - name: Generate Allure Report
+        if: always()
+        run: npm run test:allure:generate
+        continue-on-error: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-test-results
+          path: |
+            test-results/
+            allure-results/
+            reports/
+            apis-testcases/
+            mcp/context/
+          retention-days: 90
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-allure-report
+          path: allure-report/
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            let comment = '## 🌙 Nightly Test Results\n\n';
+            comment += '✅ Full test suite completed\n\n';
+            comment += '**Artifacts:**\n';
+            comment += '- Test results available in artifacts\n';
+            comment += '- Allure report generated\n';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
